@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magical Heart Love Letter</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at center, #ffe0eb, #ffb6c1, #ff9eb5);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background glow animation */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  50% { box-shadow: 0 0 30px rgba(255,255,255,0.7); }
+  100% { box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+}
+
+/* Gift box */
+#gift {
+  width: 120px;
+  height: 120px;
+  background: #ff4f8b;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  cursor: pointer;
+  animation: wiggle 1s infinite;
+}
+@keyframes wiggle {0%,100%{transform:rotate(0);}25%{transform:rotate(-5deg);}75%{transform:rotate(5deg);}}
+
+/* Floating hearts */
+.floating-heart {
+  position: absolute;
+  font-size: 24px;
+  animation: floatUp 6s linear forwards;
+  pointer-events: none;
+  opacity: 0.7;
+}
+@keyframes floatUp {
+  from { transform: translateY(0) scale(1); opacity: 0.7; }
+  to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+}
+
+/* Congrats popup */
+#congrats {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff9eb5;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+  display: none;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+#nextBtn {
+  display: none;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #ff4f8b;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Heart container */
+#heartContainer {
+  display: none;
+  perspective: 1000px;
+}
+
+/* Heart/Box */
+#heartBox {
+  width: 250px;
+  height: 250px;
+  position: relative;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  animation: glowPulse 2s infinite;
+}
+
+/* Heart front */
+.heart-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 2rem;
+  transform: scale(1);
+  transition: transform 2s;
+}
+.heart-front:hover {
+  transform: scale(1.1);
+}
+
+/* SVG heart */
+.heart-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Box back with love letter */
+.box-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: #ff9eb5;
+  transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 16px;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Love letter lines */
+#loveLetter div{
+  opacity: 0;
+  transition: opacity 1s;
+  margin: 4px 0;
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: gold;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: fall 3s linear forwards;
+}
+@keyframes fall {
+  from { transform: translateY(0) rotate(0deg); opacity: 1; }
+  to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Final message popup */
+#finalMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ff4f8b;
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 2s;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body>
+
+<!-- Background music -->
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Step 1: Gift -->
+<div id="gift">🎁</div>
+
+<!-- Step 2: Congrats popup -->
+<div id="congrats">
+  Congratulations on 1 Year 8 Months Together! ❤️
+  <div id="nextBtn">Next</div>
+</div>
+
+<!-- Step 3: Heart transforms into box -->
+<div id="heartContainer">
+  <div id="heartBox">
+    <div class="heart-front">
+      <svg class="heart-svg" viewBox="0 0 32 29.6">
+        <path d="M23.6,0C20.9,0,18.3,1.6,16,4.1C13.7,1.6,11.1,0,8.4,0C3.7,0,0,3.7,0,8.4
+          c0,4.5,4.4,8.9,11.1,14.2L16,29.6l4.9-6.9C27.6,17.3,32,12.9,32,8.4C32,3.7,28.3,0,23.6,0z"
+          fill="red"/>
+      </svg>
+    </div>
+    <div class="box-back">
+      <div id="loveLetter"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Final romantic message -->
+<div id="finalMessage">I love you endlessly ❤️</div>
+
+<script>
+const gift = document.getElementById('gift');
+const congrats = document.getElementById('congrats');
+const nextBtn = document.getElementById('nextBtn');
+const heartContainer = document.getElementById('heartContainer');
+const heartBox = document.getElementById('heartBox');
+const bgMusic = document.getElementById('bgMusic');
+const loveLetter = document.getElementById('loveLetter');
+const finalMessage = document.getElementById('finalMessage');
+
+// Floating hearts continuously
+function floatingHeart(){
+  const f = document.createElement('div');
+  f.className='floating-heart';
+  f.textContent='❤️';
+  f.style.left=Math.random()*90+'vw';
+  f.style.bottom='0';
+  f.style.fontSize=(15+Math.random()*20)+'px';
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),6000);
+}
+
+// Heart particles around heart
+function floatingAroundHeart(){
+  const f = document.createElement('div');
+  f.className='floating-heart';
+  f.textContent='💖';
+  const rect = heartBox.getBoundingClientRect();
+  f.style.left = (rect.left + rect.width/2 + (Math.random()-0.5)*100) + 'px';
+  f.style.top = (rect.top + rect.height/2 + (Math.random()-0.5)*100) + 'px';
+  f.style.fontSize=(10+Math.random()*20)+'px';
+  f.style.position='absolute';
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),4000);
+}
+
+// Confetti effect
+function createConfetti(){
+  for(let i=0;i<30;i++){
+    const c = document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=['#FFD700','#FF69B4','#FF4500','#FF1493'][Math.floor(Math.random()*4)];
+    c.style.width=c.style.height=(5+Math.random()*10)+'px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+// Start hearts continuously
+function startFloatingHearts(){
+  floatingHeart();
+  return setInterval(floatingHeart, 800);
+}
+
+// Magical love letter lines
+const loveLines = [
+  "💖 Dear Harsh ji,",
+  "Every thought of you fills me with warmth… ❤️",
+  "Your smile is the sun that brightens my darkest days,",
+  "and your laughter is the sweetest music to my soul. 🎶",
+  "Being with you makes my heart dance with joy ✨",
+  "I cherish every memory, every whisper, every touch of love we share… 💕",
+  "You are my heart, my soul, my forever, 🌹",
+  "The one I want to wake up next to and dream with endlessly.",
+  "Always yours, 🥰"
+];
+
+// Show love letter line by line
+function showLine(index) {
+  if(index >= loveLines.length) {
+    // After last line, show final message
+    setTimeout(()=>{ finalMessage.style.opacity = 1; }, 1500);
+    return;
+  }
+  const line = document.createElement('div');
+  line.textContent = loveLines[index];
+  loveLetter.appendChild(line);
+  setTimeout(() => {
+    line.style.opacity = 1;
+    floatingAroundHeart();
+  }, 100);
+
+  setTimeout(() => showLine(index + 1), 1200);
+}
+
+// Start love letter animation
+function startLoveLetterAnimation(){
+  showLine(0);
+}
+
+// Step 1: Click gift
+gift.addEventListener('click', ()=>{
+  gift.style.display='none';
+  congrats.style.display='block';
+  startFloatingHearts(); // start floating hearts
+  nextBtn.style.display='block';
+  bgMusic.play();
+});
+
+// Step 2: Click Next
+nextBtn.addEventListener('click', ()=>{
+  congrats.style.display='none';
+  nextBtn.style.display='none';
+  heartContainer.style.display='flex';
+
+  const aroundInterval = setInterval(floatingAroundHeart, 200);
+
+  // Flip heart into box
+  setTimeout(()=>{
+    heartBox.style.transition = "transform 10s linear";
+    heartBox.style.transform = "rotateY(180deg) scale(1.1)";
+  }, 500);
+
+  // Show confetti and start love letter at end of flip
+  setTimeout(()=>{
+    createConfetti();
+    clearInterval(aroundInterval);
+    startLoveLetterAnimation();
+  }, 10500);
+});
+</script>
+
+</body>
+</html>
